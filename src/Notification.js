@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, StyleSheet, Image } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import { getStatusBarHeight, isIphoneX } from 'react-native-iphone-x-helper';
+import { ImagePropTypes } from 'deprecated-react-native-prop-types';
 
 import DefaultNotificationBody from './DefaultNotificationBody';
 
@@ -173,7 +174,7 @@ Notification.propTypes = {
   topOffset: PropTypes.number,
   backgroundColour: PropTypes.string,
   notificationBodyComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  iconApp: Image.propTypes.source,
+  iconApp: ImagePropTypes.source,
   onShowing: PropTypes.func,
   onShown: PropTypes.func,
   onClosing: PropTypes.func,
