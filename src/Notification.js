@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, StyleSheet, Image } from 'react-native';
+import { Animated, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { getStatusBarHeight, isIphoneX } from 'react-native-iphone-x-helper';
+import { ImagePropTypes } from 'deprecated-react-native-prop-types';
 
 import DefaultNotificationBody from './DefaultNotificationBody';
 
@@ -16,7 +17,7 @@ class Notification extends Component {
   constructor() {
     super();
 
-    this.heightOffset = isIphoneX() ? getStatusBarHeight() : 0;
+    this.heightOffset = isIphoneX() ? getStatusBarHeight() : (Platform.OS === 'android' && Platform.Version >= 35) ? StatusBar.currentHeight : 0;
 
     this.show = this.show.bind(this);
     this.showNotification = this.showNotification.bind(this);
@@ -146,21 +147,23 @@ class Notification extends Component {
           },
         ]}
       >
-        <NotificationBody
-          title={title}
-          message={message}
-          onPress={onPress}
-          isOpen={isOpen}
-          iconApp={iconApp}
-          icon={icon}
-          vibrate={vibrate}
-          onClose={() => {
-            //clear timeout
-            clearTimeout(this.currentNotificationInterval);
-            this.setState({ isOpen: false }, this.closeNotification);
-          }}
-          additionalProps={this.state.additionalProps}
-        />
+        <View style={{ paddingTop: this.heightOffset }}>
+          <NotificationBody
+            title={title}
+            message={message}
+            onPress={onPress}
+            isOpen={isOpen}
+            iconApp={iconApp}
+            icon={icon}
+            vibrate={vibrate}
+            onClose={() => {
+              //clear timeout
+              clearTimeout(this.currentNotificationInterval);
+              this.setState({ isOpen: false }, this.closeNotification);
+            }}
+            additionalProps={this.state.additionalProps}
+          />
+        </View>
       </Animated.View>
     );
   }
@@ -173,7 +176,7 @@ Notification.propTypes = {
   topOffset: PropTypes.number,
   backgroundColour: PropTypes.string,
   notificationBodyComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  iconApp: Image.propTypes.source,
+  iconApp: ImagePropTypes.source,
   onShowing: PropTypes.func,
   onShown: PropTypes.func,
   onClosing: PropTypes.func,
