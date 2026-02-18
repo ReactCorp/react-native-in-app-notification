@@ -17,8 +17,6 @@ class Notification extends Component {
   constructor() {
     super();
 
-    this.heightOffset = isIphoneX() ? getStatusBarHeight() : (Platform.OS === 'android' && Platform.Version >= 35) ? StatusBar.currentHeight : 0;
-
     this.show = this.show.bind(this);
     this.showNotification = this.showNotification.bind(this);
     this.closeNotification = this.closeNotification.bind(this);
@@ -27,6 +25,10 @@ class Notification extends Component {
       animatedValue: new Animated.Value(0),
       isOpen: false,
     };
+  }
+
+  get heightOffset() {
+    return isIphoneX() ? getStatusBarHeight() : (Platform.OS === 'android' && Platform.Version >= 35) ? (StatusBar.currentHeight || 0) : 0;
   }
 
   show(
