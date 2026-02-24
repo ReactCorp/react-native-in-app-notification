@@ -28,7 +28,7 @@ class Notification extends Component {
   }
 
   get heightOffset() {
-    return isIphoneX() ? getStatusBarHeight() : (Platform.OS === 'android' && Platform.Version >= 35) ? (StatusBar.currentHeight || 0) : 0;
+    return isIphoneX() ? getStatusBarHeight() : (Platform.OS === 'android' && Platform.Version >= 35) ? (StatusBar.currentHeight || 24) : 0;
   }
 
   show(
