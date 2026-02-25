@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { getStatusBarHeight, isIphoneX } from 'react-native-iphone-x-helper';
 import { ImagePropTypes } from 'deprecated-react-native-prop-types';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 import DefaultNotificationBody from './DefaultNotificationBody';
 
@@ -14,6 +15,8 @@ const styles = StyleSheet.create({
 });
 
 class Notification extends Component {
+  static contextType = SafeAreaInsetsContext;
+
   constructor() {
     super();
 
@@ -28,7 +31,11 @@ class Notification extends Component {
   }
 
   get heightOffset() {
-    return isIphoneX() ? getStatusBarHeight() : (Platform.OS === 'android' && Platform.Version >= 35) ? (StatusBar.currentHeight || 24) : 0;
+    if (isIphoneX()) return getStatusBarHeight();
+    if (Platform.OS === 'android' && Platform.Version >= 35) {
+      return this.context?.top ?? StatusBar.currentHeight ?? 24;
+    }
+    return 0;
   }
 
   show(
